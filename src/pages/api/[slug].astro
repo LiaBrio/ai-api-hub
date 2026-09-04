@@ -1,0 +1,256 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ApiCard from '../../components/ApiCard.astro';
+
+export async function getStaticPaths() {
+  const apis = await getCollection('apis');
+  return apis.map((api) => ({
+    params: { slug: api.id },
+    props: { api },
+  }));
+}
+
+interface Props {
+  api: CollectionEntry<'apis'>;
+}
+
+const { api } = Astro.props;
+const { data } = api;
+
+const allApis = await getCollection('apis');
+const relatedApis = allApis
+  .filter((item) => item.data.category === data.category && item.id !== api.id)
+  .sort((a, b) => (b.data.weight ?? 0) - (a.data.weight ?? 0))
+  .slice(0, 3);
+
+const categoryLabels: Record<string, string> = {
+  'openai-compatible': 'OpenAI 兼容',
+  'multi-provider': '多模型聚合',
+  'claude-api': 'Claude API',
+  'image-gen': '图像生成',
+  speech: '语音合成',
+  embedding: '向量嵌入',
+  other: '其他',
+};
+
+const authLabels: Record<string, string> = {
+  'api-key': 'API Key',
+  oauth: 'OAuth 2.0',
+  token: 'Bearer Token',
+  free: '免费无需认证',
+  mixed: '混合认证',
+};
+
+const pricingLabels: Record<string, string> = {
+  free: '完全免费',
+  freemium: '免费 + 付费',
+  paid: '付费',
+  'pay-as-you-go': '按量付费',
+};
+
+const statusConfig: Record<string, { label: string; classes: string; dot: string }> = {
+  active: {
+    label: '正常运行',
+    classes: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+    dot: 'bg-emerald-500',
+  },
+  maintenance: {
+    label: '维护中',
+    classes: 'bg-amber-50 text-amber-700 ring-amber-600/20',
+    dot: 'bg-amber-400',
+  },
+  deprecated: {
+    label: '已停用',
+    classes: 'bg-red-50 text-red-700 ring-red-600/20',
+    dot: 'bg-red-500',
+  },
+};
+
+const currentStatus = statusConfig[data.status] ?? statusConfig.deprecated;
+const formatDate = (value: string) => new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(new Date(value));
+
+const softwareApplicationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: data.name,
+  description: data.description,
+  url: data.url,
+  applicationCategory: 'DeveloperApplication',
+  offers: {
+    '@type': 'Offer',
+    price: data.pricing === 'free' ? '0' : undefined,
+    priceCurrency: 'USD',
+  },
+};
+---
+
+<BaseLayout
+  title={`${data.name} - AI API 详情`}
+  description={data.description}
+  keywords={data.tags.join(', ')}
+  canonical={`/api/${api.id}`}
+>
+  <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <nav aria-label="面包屑" class="mb-8 text-sm text-gray-500">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="/" class="transition-colors hover:text-primary-600">首页</a></li>
+        <li aria-hidden="true">&gt;</li>
+        <li>API 详情</li>
+        <li aria-hidden="true">&gt;</li>
+        <li class="font-medium text-gray-900" aria-current="page">{data.name}</li>
+      </ol>
+    </nav>
+
+    <article class="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+      <header class="border-b border-gray-100 bg-gradient-to-br from-blue-50 to-indigo-50 px-6 py-8 sm:px-10 sm:py-10">
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">{data.name}</h1>
+              <span class:list={[
+                'inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ring-1 ring-inset',
+                currentStatus.classes,
+              ]}>
+                <span class:list={['h-2 w-2 rounded-full', currentStatus.dot]}></span>
+                {currentStatus.label}
+              </span>
+            </div>
+            <p class="mt-4 max-w-3xl text-base leading-7 text-gray-600 sm:text-lg">{data.description}</p>
+          </div>
+          <span class="inline-flex w-fit shrink-0 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-primary-700 shadow-sm ring-1 ring-inset ring-primary-200">
+            {categoryLabels[data.category] ?? categoryLabels.other}
+          </span>
+        </div>
+      </header>
+
+      <div class="px-6 py-8 sm:px-10 sm:py-10">
+        <section aria-labelledby="service-info-title">
+          <h2 id="service-info-title" class="text-xl font-bold text-gray-950">服务信息</h2>
+          <dl class="mt-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            <div class="border-b border-gray-100 pb-5">
+              <dt class="text-sm font-medium text-gray-500">服务地址</dt>
+              <dd class="mt-2">
+                <a href={data.url} target="_blank" rel="noopener noreferrer" class="break-all font-medium text-primary-600 hover:text-primary-700">
+                  {data.url}
+                </a>
+              </dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5">
+              <dt class="text-sm font-medium text-gray-500">文档地址</dt>
+              <dd class="mt-2">
+                {data.docsUrl ? (
+                  <a href={data.docsUrl} target="_blank" rel="noopener noreferrer" class="break-all font-medium text-primary-600 hover:text-primary-700">
+                    {data.docsUrl}
+                  </a>
+                ) : (
+                  <span class="text-gray-400">暂未提供</span>
+                )}
+              </dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5">
+              <dt class="text-sm font-medium text-gray-500">认证方式</dt>
+              <dd class="mt-2 font-medium text-gray-900">{authLabels[data.authType] ?? data.authType}</dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5">
+              <dt class="text-sm font-medium text-gray-500">定价模式</dt>
+              <dd class="mt-2 font-medium text-gray-900">{pricingLabels[data.pricing] ?? data.pricing}</dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5">
+              <dt class="text-sm font-medium text-gray-500">免费额度</dt>
+              <dd class="mt-2 font-medium text-gray-900">{data.hasFreeQuota ? '有' : '无'}</dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5">
+              <dt class="text-sm font-medium text-gray-500">分类</dt>
+              <dd class="mt-2 font-medium text-gray-900">{categoryLabels[data.category] ?? categoryLabels.other}</dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5 sm:col-span-2">
+              <dt class="text-sm font-medium text-gray-500">支持模型</dt>
+              <dd class="mt-3 flex flex-wrap gap-2">
+                {data.models.length > 0 ? data.models.map((model) => (
+                  <span class="rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700">{model}</span>
+                )) : (
+                  <span class="text-gray-400">暂未提供</span>
+                )}
+              </dd>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5 sm:col-span-2">
+              <dt class="text-sm font-medium text-gray-500">标签</dt>
+              <dd class="mt-3 flex flex-wrap gap-2">
+                {data.tags.length > 0 ? data.tags.map((tag) => (
+                  <span class="rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-600">#{tag}</span>
+                )) : (
+                  <span class="text-gray-400">暂无标签</span>
+                )}
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500">最后验证</dt>
+              <dd class="mt-2 font-medium text-gray-900">
+                <time datetime={data.lastVerified}>{formatDate(data.lastVerified)}</time>
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-sm font-medium text-gray-500">收录时间</dt>
+              <dd class="mt-2 font-medium text-gray-900">
+                <time datetime={data.addedAt}>{formatDate(data.addedAt)}</time>
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <div class="mt-10 flex flex-col-reverse gap-4 border-t border-gray-100 pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <a href="/" class="text-center text-sm font-semibold text-gray-600 transition-colors hover:text-primary-600 sm:text-left">
+            返回首页
+          </a>
+          <a
+            href={data.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-xl bg-primary-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          >
+            访问该服务
+          </a>
+        </div>
+      </div>
+    </article>
+
+    {relatedApis.length > 0 && (
+      <section class="mt-16" aria-labelledby="related-apis-title">
+        <h2 id="related-apis-title" class="text-2xl font-bold tracking-tight text-gray-950">相关 API</h2>
+        <p class="mt-2 text-gray-500">更多同分类的优质服务</p>
+        <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {relatedApis.map((relatedApi) => (
+            <ApiCard
+              id={relatedApi.id}
+              name={relatedApi.data.name}
+              description={relatedApi.data.description}
+              url={relatedApi.data.url}
+              category={relatedApi.data.category}
+              tags={relatedApi.data.tags}
+              authType={relatedApi.data.authType}
+              pricing={relatedApi.data.pricing}
+              hasFreeQuota={relatedApi.data.hasFreeQuota}
+              status={relatedApi.data.status}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(softwareApplicationJsonLd)}></script>
+</BaseLayout>

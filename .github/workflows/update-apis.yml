@@ -1,0 +1,48 @@
+name: Update API Data
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Collect and verify API data
+        run: pnpm run update:apis
+        continue-on-error: true
+
+      - name: Validate data
+        run: pnpm run validate:data
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet src/content/apis/ || echo "hasChanges=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push
+        if: steps.changes.outputs.hasChanges == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/content/apis/
+          git commit -m "chore: auto-update API data [skip ci]"
+          git push

@@ -1,0 +1,24 @@
+{
+  "name": "AI 语音合成 API",
+  "description": "基于最新 TTS 技术的语音合成接口，支持多语言多音色实时合成",
+  "url": "https://tts-api.example.com",
+  "docsUrl": "https://tts-api.example.com/docs",
+  "models": [
+    "tts-1",
+    "tts-1-hd",
+    "whisper-1"
+  ],
+  "category": "speech",
+  "tags": [
+    "语音合成",
+    "TTS",
+    "多语言"
+  ],
+  "authType": "token",
+  "pricing": "freemium",
+  "hasFreeQuota": true,
+  "status": "maintenance",
+  "lastVerified": "2026-09-03T08:35:09.302Z",
+  "addedAt": "2026-08-10T00:00:00Z",
+  "weight": 60
+}

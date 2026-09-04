@@ -1,0 +1,4 @@
+{
+  "description": "手动维护的 API 数据源列表，collect-apis.ts 会读取此文件",
+  "sources": []
+}

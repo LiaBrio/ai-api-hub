@@ -1,0 +1,24 @@
+{
+  "name": "向量嵌入服务",
+  "description": "高性能文本向量化 API，支持 OpenAI Embedding 和开源模型，适用于 RAG 场景",
+  "url": "https://embedding.example.com",
+  "docsUrl": "https://embedding.example.com/api",
+  "models": [
+    "text-embedding-3-large",
+    "text-embedding-3-small",
+    "bge-large-zh"
+  ],
+  "category": "embedding",
+  "tags": [
+    "向量化",
+    "RAG",
+    "语义搜索"
+  ],
+  "authType": "api-key",
+  "pricing": "freemium",
+  "hasFreeQuota": true,
+  "status": "maintenance",
+  "lastVerified": "2026-09-03T08:35:06.075Z",
+  "addedAt": "2026-07-25T00:00:00Z",
+  "weight": 65
+}

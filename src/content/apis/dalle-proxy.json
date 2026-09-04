@@ -1,0 +1,23 @@
+{
+  "name": "DALL·E 代理",
+  "description": "DALL·E 3 和 DALL·E 2 图像生成 API 代理，支持批量生成和自定义尺寸",
+  "url": "https://dalle-proxy.example.com",
+  "docsUrl": "https://dalle-proxy.example.com/api-docs",
+  "models": [
+    "dall-e-3",
+    "dall-e-2"
+  ],
+  "category": "image-gen",
+  "tags": [
+    "图像生成",
+    "DALL·E",
+    "AI 绘画"
+  ],
+  "authType": "api-key",
+  "pricing": "paid",
+  "hasFreeQuota": false,
+  "status": "maintenance",
+  "lastVerified": "2026-09-03T08:35:05.386Z",
+  "addedAt": "2026-08-01T00:00:00Z",
+  "weight": 70
+}

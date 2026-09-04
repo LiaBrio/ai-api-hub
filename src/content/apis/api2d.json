@@ -1,0 +1,24 @@
+{
+  "name": "API2D",
+  "description": "提供 OpenAI 和 Claude 双模型代理服务，支持流式输出和 Function Calling",
+  "url": "https://api2d.com",
+  "docsUrl": "https://api2d.com/wiki/doc",
+  "models": [
+    "gpt-4o",
+    "gpt-4-turbo",
+    "claude-3.5-sonnet"
+  ],
+  "category": "multi-provider",
+  "tags": [
+    "多模型",
+    "流式输出",
+    "Function Calling"
+  ],
+  "authType": "token",
+  "pricing": "pay-as-you-go",
+  "hasFreeQuota": false,
+  "status": "active",
+  "lastVerified": "2026-09-03T08:35:04.027Z",
+  "addedAt": "2026-07-20T00:00:00Z",
+  "weight": 90
+}

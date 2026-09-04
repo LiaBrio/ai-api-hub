@@ -1,0 +1,49 @@
+<div class="relative">
+  <label for="api-search" class="sr-only">搜索 API</label>
+  <svg
+    viewBox="0 0 20 20"
+    class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    aria-hidden="true"
+  >
+    <circle cx="8.5" cy="8.5" r="5.5"></circle>
+    <path d="m13 13 4 4"></path>
+  </svg>
+  <input
+    id="api-search"
+    type="search"
+    placeholder="搜索 API 名称、描述或标签..."
+    autocomplete="off"
+    class="w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-4 text-base text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-primary-500 focus:ring-4 focus:ring-primary-100"
+  />
+</div>
+<p id="api-empty-state" class="mt-10 rounded-xl border border-dashed border-gray-300 bg-white px-6 py-12 text-center text-gray-500" hidden>
+  未找到匹配的 API
+</p>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>('#api-search');
+  const emptyState = document.querySelector<HTMLElement>('#api-empty-state');
+
+  const applySearch = () => {
+    const query = searchInput?.value.trim().toLowerCase() ?? '';
+    const activeCategory = document
+      .querySelector<HTMLButtonElement>('[data-category-filter][aria-pressed="true"]')
+      ?.dataset.categoryFilter ?? 'all';
+    let visibleCount = 0;
+
+    document.querySelectorAll<HTMLElement>('.api-card').forEach((card) => {
+      const searchableText = `${card.dataset.name ?? ''} ${card.dataset.description ?? ''} ${card.dataset.tags ?? ''}`.toLowerCase();
+      const matchesSearch = searchableText.includes(query);
+      const matchesCategory = activeCategory === 'all' || card.dataset.category === activeCategory;
+      card.hidden = !(matchesSearch && matchesCategory);
+      if (matchesSearch && matchesCategory) visibleCount += 1;
+    });
+
+    if (emptyState) emptyState.hidden = visibleCount > 0;
+  };
+
+  searchInput?.addEventListener('input', applySearch);
+</script>

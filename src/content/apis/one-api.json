@@ -1,0 +1,24 @@
+{
+  "name": "One API",
+  "description": "开源的多模型管理与分发系统，支持 OpenAI、Claude、Gemini 等主流模型",
+  "url": "https://openai-sb.com",
+  "docsUrl": "https://github.com/songquanpeng/one-api",
+  "models": [
+    "gpt-4o",
+    "claude-3.5-sonnet",
+    "gemini-1.5-pro"
+  ],
+  "category": "multi-provider",
+  "tags": [
+    "开源",
+    "自部署",
+    "多模型聚合"
+  ],
+  "authType": "api-key",
+  "pricing": "free",
+  "hasFreeQuota": true,
+  "status": "maintenance",
+  "lastVerified": "2026-09-03T08:35:06.614Z",
+  "addedAt": "2026-06-10T00:00:00Z",
+  "weight": 95
+}

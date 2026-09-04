@@ -1,0 +1,25 @@
+{
+  "name": "OpenRouter",
+  "description": "统一接口访问 100+ AI 模型，包括 GPT-4、Claude、Llama、Mistral 等",
+  "url": "https://openrouter.ai",
+  "docsUrl": "https://openrouter.ai/docs",
+  "models": [
+    "gpt-4o",
+    "claude-3.5-sonnet",
+    "llama-3.1-405b",
+    "mistral-large"
+  ],
+  "category": "multi-provider",
+  "tags": [
+    "模型路由",
+    "100+模型",
+    "统一接口"
+  ],
+  "authType": "api-key",
+  "pricing": "pay-as-you-go",
+  "hasFreeQuota": true,
+  "status": "active",
+  "lastVerified": "2026-09-03T08:35:08.675Z",
+  "addedAt": "2026-05-15T00:00:00Z",
+  "weight": 98
+}

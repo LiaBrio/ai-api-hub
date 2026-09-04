@@ -1,0 +1,25 @@
+{
+  "name": "OpenAI-HK",
+  "description": "国内可直连的 OpenAI API 代理，支持 GPT-4o 全系列模型，低延迟高稳定性",
+  "url": "https://api.openai-hk.com",
+  "docsUrl": "https://openai-hk.com/docs",
+  "models": [
+    "gpt-4o",
+    "gpt-4o-mini",
+    "o1-preview",
+    "o1-mini"
+  ],
+  "category": "openai-compatible",
+  "tags": [
+    "GPT-4",
+    "国内直连",
+    "低延迟"
+  ],
+  "authType": "api-key",
+  "pricing": "freemium",
+  "hasFreeQuota": true,
+  "status": "active",
+  "lastVerified": "2026-09-03T08:35:07.369Z",
+  "addedAt": "2026-08-15T00:00:00Z",
+  "weight": 100
+}

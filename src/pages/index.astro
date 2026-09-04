@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ApiCard from '../components/ApiCard.astro';
+import CategoryFilter from '../components/CategoryFilter.astro';
+import SearchBar from '../components/SearchBar.astro';
+
+const allApis = await getCollection('apis');
+const sortedApis = allApis.sort((a, b) => (b.data.weight ?? 0) - (a.data.weight ?? 0));
+const categories = [...new Set(sortedApis.map((api) => api.data.category))];
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'AI API 服务列表',
+  numberOfItems: sortedApis.length,
+  itemListElement: sortedApis.map((api, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: api.data.name,
+    url: new URL(`/api/${api.id}`, Astro.site).href,
+  })),
+};
+---
+
+<BaseLayout
+  title="AI API 中转站集合导航"
+  description="汇聚优质 AI API 接口，一站式中转与调用指南，快速查找 OpenAI、Claude、图像生成、语音合成等 API 服务。"
+>
+  <section class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white" aria-labelledby="hero-title">
+    <div class="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <h1 id="hero-title" class="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        AI API 中转站集合导航
+      </h1>
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-blue-100 sm:text-xl">
+        汇聚优质 AI API 接口，一站式中转与调用指南
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8" aria-labelledby="api-list-title">
+    <div class="mx-auto max-w-3xl">
+      <SearchBar />
+    </div>
+
+    <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 id="api-list-title" class="text-2xl font-bold tracking-tight text-gray-950">探索 API 服务</h2>
+        <p class="mt-1 text-sm text-gray-500">
+          共收录 {sortedApis.length} 个 AI API 服务，涵盖 {categories.length} 个分类
+        </p>
+      </div>
+      <CategoryFilter />
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {sortedApis.map((api) => (
+        <ApiCard
+          id={api.id}
+          name={api.data.name}
+          description={api.data.description}
+          url={api.data.url}
+          category={api.data.category}
+          tags={api.data.tags}
+          authType={api.data.authType}
+          pricing={api.data.pricing}
+          hasFreeQuota={api.data.hasFreeQuota}
+          status={api.data.status}
+        />
+      ))}
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)}></script>
+</BaseLayout>

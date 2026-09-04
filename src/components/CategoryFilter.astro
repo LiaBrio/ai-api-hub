@@ -1,0 +1,71 @@
+---
+const categories = [
+  { value: 'all', label: '全部' },
+  { value: 'openai-compatible', label: 'OpenAI 兼容' },
+  { value: 'multi-provider', label: '多模型聚合' },
+  { value: 'claude-api', label: 'Claude API' },
+  { value: 'image-gen', label: '图像生成' },
+  { value: 'speech', label: '语音合成' },
+  { value: 'embedding', label: '向量嵌入' },
+  { value: 'other', label: '其他' },
+];
+---
+
+<nav aria-label="API 分类筛选" class="flex flex-wrap gap-2" id="category-filter">
+  {categories.map(({ value, label }, index) => (
+    <button
+      type="button"
+      data-category-filter={value}
+      aria-pressed={index === 0 ? 'true' : 'false'}
+      class:list={[
+        'rounded-full px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+        index === 0
+          ? 'bg-primary-500 text-white shadow-sm'
+          : 'bg-white text-gray-600 ring-1 ring-inset ring-gray-200 hover:bg-primary-50 hover:text-primary-700',
+      ]}
+    >
+      {label}
+    </button>
+  ))}
+</nav>
+
+<script>
+  const filterRoot = document.querySelector('#category-filter');
+  const filterButtons = filterRoot?.querySelectorAll<HTMLButtonElement>('[data-category-filter]') ?? [];
+
+  const applyCategoryFilter = () => {
+    const activeButton = filterRoot?.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
+    const activeCategory = activeButton?.dataset.categoryFilter ?? 'all';
+    const query = document.querySelector<HTMLInputElement>('#api-search')?.value.trim().toLowerCase() ?? '';
+    let visibleCount = 0;
+
+    document.querySelectorAll<HTMLElement>('.api-card').forEach((card) => {
+      const searchableText = `${card.dataset.name ?? ''} ${card.dataset.description ?? ''} ${card.dataset.tags ?? ''}`.toLowerCase();
+      const matchesCategory = activeCategory === 'all' || card.dataset.category === activeCategory;
+      const isVisible = matchesCategory && searchableText.includes(query);
+      card.hidden = !isVisible;
+      if (isVisible) visibleCount += 1;
+    });
+
+    const emptyState = document.querySelector<HTMLElement>('#api-empty-state');
+    if (emptyState) emptyState.hidden = visibleCount > 0;
+  };
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach((item) => {
+        const isActive = item === button;
+        item.setAttribute('aria-pressed', String(isActive));
+        item.classList.toggle('bg-primary-500', isActive);
+        item.classList.toggle('text-white', isActive);
+        item.classList.toggle('shadow-sm', isActive);
+        item.classList.toggle('bg-white', !isActive);
+        item.classList.toggle('text-gray-600', !isActive);
+        item.classList.toggle('ring-1', !isActive);
+        item.classList.toggle('ring-inset', !isActive);
+        item.classList.toggle('ring-gray-200', !isActive);
+      });
+      applyCategoryFilter();
+    });
+  });
+</script>

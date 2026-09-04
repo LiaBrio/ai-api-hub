@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>AI API 中转站集合导航</title>
+  <path d="M32 3 56 17v30L32 61 8 47V17L32 3Z" fill="#3b82f6"/>
+  <path d="M22 32h20M24 29l6-9M40 29l-6-9M24 35l6 9M40 35l-6 9" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="20" cy="32" r="5" fill="#fff"/>
+  <circle cx="32" cy="17" r="5" fill="#fff"/>
+  <circle cx="44" cy="32" r="5" fill="#fff"/>
+  <circle cx="32" cy="47" r="5" fill="#fff"/>
+  <circle cx="20" cy="32" r="2" fill="#1d4ed8"/>
+  <circle cx="32" cy="17" r="2" fill="#1d4ed8"/>
+  <circle cx="44" cy="32" r="2" fill="#1d4ed8"/>
+  <circle cx="32" cy="47" r="2" fill="#1d4ed8"/>
+</svg>
