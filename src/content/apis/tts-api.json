@@ -17,8 +17,8 @@
   "authType": "token",
   "pricing": "freemium",
   "hasFreeQuota": true,
-  "status": "maintenance",
-  "lastVerified": "2026-09-03T08:35:09.302Z",
+  "status": "deprecated",
+  "lastVerified": "2026-09-07T06:57:45.242Z",
   "addedAt": "2026-08-10T00:00:00Z",
   "weight": 60
 }

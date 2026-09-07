@@ -17,8 +17,8 @@
   "authType": "api-key",
   "pricing": "freemium",
   "hasFreeQuota": true,
-  "status": "maintenance",
-  "lastVerified": "2026-09-03T08:35:04.686Z",
+  "status": "deprecated",
+  "lastVerified": "2026-09-07T06:57:41.389Z",
   "addedAt": "2026-07-05T00:00:00Z",
   "weight": 85
 }
