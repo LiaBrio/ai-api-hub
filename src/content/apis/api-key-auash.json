@@ -1,0 +1,23 @@
+{
+  "name": "API key",
+  "description": "OpenAI-compatible third-party gateway with public GPT, Claude, Gemini, and Grok model families.",
+  "url": "https://api.auash.com",
+  "docsUrl": "https://api.auash.com/docs",
+  "models": [
+    "GPT",
+    "Claude",
+    "Gemini",
+    "Grok"
+  ],
+  "category": "multi-provider",
+  "tags": [
+    "OpenAI compatible",
+    "multi-model"
+  ],
+  "authType": "api-key",
+  "pricing": "pay-as-you-go",
+  "status": "active",
+  "lastVerified": "2026-11-19T08:02:45Z",
+  "addedAt": "2026-11-19T08:02:45Z",
+  "weight": 50
+}
