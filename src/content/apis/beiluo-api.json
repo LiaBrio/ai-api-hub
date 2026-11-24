@@ -1,0 +1,23 @@
+{
+  "name": "北洛API",
+  "description": "提供 OpenAI、Claude 和 Gemini 兼容接口，按模型和分组计费，支持文本对话、图像生成和每日签到额度。",
+  "url": "https://beiluoxi.xyz/",
+  "docsUrl": "https://beiluoxi.xyz/help/_full.html",
+  "models": [
+    "gpt-6.2-sol",
+    "claude-sonnet-4-6",
+    "deepseek-v4-pro"
+  ],
+  "category": "multi-provider",
+  "tags": [
+    "多模型聚合",
+    "图像生成"
+  ],
+  "authType": "api-key",
+  "pricing": "pay-as-you-go",
+  "hasFreeQuota": true,
+  "status": "active",
+  "lastVerified": "2026-11-24T11:54:11.388Z",
+  "addedAt": "2026-11-24T11:54:11.388Z",
+  "weight": 0
+}
